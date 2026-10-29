@@ -1,0 +1,12 @@
+### 워크트리 및 시뮬레이터 정리 (Worktree and simulator cleanup)
+
+1. 스냅샷 및 감사(audit)를 수행하세요. `df -h /` 결과를 기록한 다음 `scripts/worktree-audit.sh [-b <pr-base-ref>] [repo-path]`를 실행하세요(principle-build-the-lever). `-b` 옵션이 없으면 `origin/HEAD`를 기준으로 `MERGED` 여부를 확인하므로, PR들이 다른 브랜치를 타겟으로 삼는 경우에는 `-b origin/<branch>`를 전달하세요. 수동으로 입력한 `myrepo-worktrees/x`는 `.cursor/worktrees/myrepo/x`에 위치한 워크트리를 놓치게 되므로, 스크립트는 수동 입력 대신 `git worktree list`에서 경로를 읽습니다(principle-encode-lessons-in-structure). 스크립트는 각 워크트리를 크기, 생성 경과 시간(age), 머지 상태, 커밋되지 않은 작업, PR 상태, 그리고 해당 워크트리를 건드린 가장 최근 채팅을 기준으로 분류한 뒤 버킷을 제안합니다. 트랜스크립트 스캔은 느리므로 백그라운드로 실행하세요.
+2. 버킷은 조언일 뿐 삭제 허가가 아닙니다. 고정된(pinned) 채팅과 활성 채팅이 실제 산출물입니다(principle-prove-it-works). 사용자나 사이드바로부터 그 목록을 확보하여 모든 후보를 교차 검증하세요. 지렛대 스크립트가 사용자가 고정해 둔 워크트리를 `safe`로 표시한 사례가 있으므로 항상 고정된 채팅 세트가 우선합니다.
+3. 삭제하기 전에 사용 여부를 검증하세요. 모든 `verify-recent-chat` 행이나 조금이라도 의심스러운 항목에 대해서는 서브에이전트들을 팬아웃하여 트랜스크립트를 읽고 해당 채팅이 고정되어 있거나 진행 중인지, 그리고 어떤 워크트리들을 건드리는지 보고하게 하세요(principle-guard-the-context-window, 트랜스크립트는 대용량입니다). 고정된 채팅은 백그라운드 서브에이전트를 통해 형제 워크트리에 아레나(arena) 및 재현 트리를 생성하며, 이러한 워크트리들은 이름이 사이드바에 나타나지 않더라도 사용 중인 상태입니다. 서브에이전트(Subagents) 섹션에 따라 작업에 맞게 각 서브에이전트의 추론 수준과 빠른(fast) 또는 표준(standard) 속도를 선택하세요.
+4. 되돌릴 수 없는 손실 앞에서는 일시 정지하세요. `wip:N`은 추적 중인 파일의 커밋되지 않은 편집 N개를 의미합니다. 깨끗한 워크트리를 제거하는 것은 브랜치에서 복구할 수 있지만 커밋되지 않은 작업은 영구히 사라지므로, 먼저 diff를 보여주고 결정을 받으세요. `scratch:N`은 추적되지 않는(untracked) 일회성 파일로 버려도 안전하지만 파일 이름들은 명시하세요. 자율성(Autonomy) 섹션에 따라 깨끗하고(clean) 머지되었으며(merged) 사용 중이지 않은(not-in-use) 워크트리는 바로 삭제를 진행합니다. `wip` 상태이거나 사용 중인 워크트리는 일시 정지합니다.
+5. 확인된 세트를 정리(prune)하세요. 경로별로 `git worktree remove --force <path>`를 실행합니다. gitignore 처리된 빌드 산출물 때문에 디렉터리가 남아 있다면 `rm -rf`로 지운 다음 `git worktree prune`을 실행하세요. 브랜치 ref는 그대로 남으므로 어떤 커밋도 유실되지 않습니다. `df -h /`와 목록 재조회로 결과를 확인하세요.
+6. 시뮬레이터 및 기타 공간 회수 대상들을 정리하세요. 보통 시뮬레이터가 그다음으로 가장 큰 용량을 차지합니다. `xcrun simctl --set testing delete all`(XCTestDevices 클론 삭제), `xcrun simctl delete unavailable`, 그리고 오래된 런타임에 대해 `xcrun simctl runtime list` 후 `runtime delete <id>`를 실행하세요. 추가 공간 확보가 필요할 때는 Xcode의 `DerivedData`와 `iOS DeviceSupport`, `~/Library/Application Support/Cursor`(`state.vscdb.backup`, 그리고 워크스페이스로 열었던 폴더 이름의 `<root>`가 비대해진 `snapshots/roots/<root>`), 패키지 캐시(pnpm, uv, brew, yarn)를 확인하세요. 사용자가 유지하라고 말하지 않은 캐시만 비우세요.
+
+이 플레이북은 실수를 잡아줄 코드 리뷰 없이 사용자 상태를 직접 삭제하는 유일한 플레이북이므로, 위의 게이트들이 곧 리뷰 역할을 합니다.
+
+**응답(Reply):** 정리 전후의 `df -h /` 비교와 확보된 용량, 정리된 워크트리 목록, 그리고 삭제하지 않고 보류한 각 워크트리의 한 줄 사유(어느 채팅에서 사용 중인지 또는 커밋되지 않은 작업이 있는지).
