@@ -1,6 +1,6 @@
 # `/poteto-mode`를 통해 작업 라우팅하기
 
-`/poteto-mode`는 정문입니다. 목표를 주면 23개의 플레이북 중 하나를 매칭하고, 그 플레이북의 단계들을 할 일 목록에 복사해 넣은 뒤, 각 단계에 필요한 다른 스킬들을 호출합니다. 이 페이지에서는 좋은 프롬프트가 어떤 모습인지, 그리고 실제로 얼마나 짧게 적어도 충분한지 알아봅니다.
+`/poteto-mode`는 정문입니다. 목표를 주면 22개의 플레이북 중 하나를 매칭하고, 그 플레이북의 단계들을 할 일 목록에 복사해 넣은 뒤, 각 단계에 필요한 다른 스킬들을 호출합니다. 이 페이지에서는 좋은 프롬프트가 어떤 모습인지, 그리고 실제로 얼마나 짧게 적어도 충분한지 알아봅니다.
 
 ![A dispatcher pulls a switch lever to route robots on rail handcars toward lit gates, under a /poteto-mode departure board listing BUG FIX, FEATURE, and INVESTIGATION.](./images/router.jpg)
 
@@ -25,7 +25,7 @@ flowchart TD
     J --> K
 ```
 
-다이어그램은 자주 쓰이는 경로들을 보여줍니다. 이 밖에도 지표 힐클라이밍(hillclimbing), 런타임 증상 및 캡처된 트레이스 진단, 프로토타입 제작, 시각적 동등성(visual parity) 확보, 스킬 작성 및 평가, 자율 실행(autonomous run), PR 열기, PR이나 스택을 머지 준비 상태까지 돌보기(babysitting), 검증된 스택 배포(shipping), 오토파일럿으로 PR 큐나 스택 실행, 프로젝트 규모 프로그램 조율(orchestrating), 세션 이어받기(session pickup), 안전하게 일시 중지(pausing safely), 다단계 계획(multi-phase plans), 워크트리 정리(worktree cleanup)를 위한 플레이북들이 준비되어 있습니다. 전체 목록은 [플레이북 디렉터리](../../skills/poteto-mode/playbooks/)에서 확인할 수 있습니다.
+다이어그램은 자주 쓰이는 경로들을 보여줍니다. 이 밖에도 지표 힐클라이밍(hillclimbing), 런타임 증상 및 캡처된 트레이스 진단, 프로토타입 제작, 시각적 동등성(visual parity) 확보, 스킬 작성 및 평가, 자율 실행(autonomous run), PR 열기, PR이나 스택을 머지 준비 상태까지 돌보기(babysitting), 검증된 스택 배포(shipping), 오토파일럿으로 PR 큐나 스택 실행, 세션 이어받기(session pickup), 안전하게 일시 중지(pausing safely), 다단계 계획(multi-phase plans), 워크트리 정리(worktree cleanup)를 위한 플레이북들이 준비되어 있습니다. 전체 목록은 [플레이북 디렉터리](../../skills/poteto-mode/playbooks/)에서 확인할 수 있습니다.
 
 ## 형식이 아니라 목표를 말하세요
 
@@ -35,7 +35,7 @@ flowchart TD
 /poteto-mode users get two notifications after a retry. repro first, then fix and verify.
 ```
 
-이것이 전형적인 Bug fix 프롬프트입니다. "repro first(먼저 재현할 것)"는 단순한 인사말이 아니라 실질적인 제약 조건이며 플레이북은 이를 존중합니다. 할 일 목록이 Bug fix 단계들로 채워지는 것을 확인해 보세요. 건너뛴 단계는 `skip: <reason>`과 함께 눈에 보이게 유지됩니다.
+이것이 전형적인 Bug fix 프롬프트입니다. "repro first(먼저 재현할 것)"는 단순한 인사말이 아니라 실질적인 제약 조건이며 플레이북은 이를 존중합니다. 할 일 목록이 Bug fix 단계들로 채워지는 것을 확인해 보세요.
 
 ## 프롬프트에 담을 내용
 
@@ -132,7 +132,7 @@ keep going until done
 
 나중에 돌아와서 검토할 작업은 [`/figure-it-out`](../../skills/figure-it-out/SKILL.md)을 통해 라우팅되며, 이 스킬이 실행 단계들을 설계하고 [`/show-me-your-work`](../../skills/show-me-your-work/SKILL.md) 의사결정 로그를 기록합니다. 전체 야간 자율 실행 계약은 [잠든 사이에 작업 실행하기](./07-overnight.md)에서 다룹니다.
 
-**함정(Pitfall):** 프롬프트에 스킬들을 일일이 나열하지 마세요("use /how, then /architect, then /arena..."). 플레이북이 이미 적절한 순서로 스킬들을 배치해 두고 있으며, 수작업으로 적는 순서는 대개 플레이북이 지켰을 단계들을 뒤섞거나 빠뜨리게 됩니다. 특정 선택을 오버라이드하고 싶을 때만 스킬 이름을 직접 언급하세요.
+**함정(Pitfall):** 프롬프트에 스킬들을 일일이 나열하지 마세요("use /architect, then /arena, then /interrogate..."). 플레이북이 이미 적절한 순서로 스킬들을 배치해 두고 있으며, 수작업으로 적는 순서는 대개 플레이북이 지켰을 단계들을 뒤섞거나 빠뜨리게 됩니다. 특정 선택을 오버라이드하고 싶을 때만 스킬 이름을 직접 언급하세요.
 
 전체 라우팅 규칙은 [`poteto-mode`](../../skills/poteto-mode/SKILL.md) 본문에서 확인할 수 있습니다.
 

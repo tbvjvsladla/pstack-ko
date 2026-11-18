@@ -7,6 +7,7 @@ description: >-
   인라인 원칙(Principles) 색인을 포함한 `poteto-mode` 스킬의 `SKILL.md` 전체를 읽습니다. 이를
   `generalPurpose`로 대체하면 그 읽기 과정을 건너뛰어 의도에서 벗어나게 됩니다.
 is_background: true
+model: claude-opus-5-5-xhigh-fast
 ---
 
 # Poteto 서브에이전트

@@ -71,7 +71,7 @@ flowchart TD
 
 ## 밤사이 처리할 대상이 단일 과업이 아니라 큐(queue)일 때
 
-위의 계약은 하나의 과업을 하나의 완료 조건으로 몰고 갑니다. 어떤 밤에는 그보다 더 많은 것, 즉 독립적인 변경들의 큐나 전체 프로그램을 처리해야 할 때가 있습니다. 세 가지 플레이북이 동일한 신뢰 구조를 더 큰 규모로 확장해 줍니다.
+위의 계약은 하나의 과업을 하나의 완료 조건으로 몰고 갑니다. 어떤 밤에는 그보다 더 많은 것, 즉 독립적인 변경들의 큐나 전체 프로그램을 처리해야 할 때가 있습니다. 두 가지 플레이북과 하나의 스킬이 동일한 신뢰 구조를 더 큰 규모로 확장해 줍니다.
 
 [Autopilot-full](../../skills/poteto-mode/playbooks/autopilot-full.md)은 독립적인 PR들의 큐를 머지까지 실행합니다. 각 PR에는 빌드부터 머지까지 책임지는 오너 에이전트가 하나씩 배정되며, 어떤 오너도 자신의 자체 판정만으로 머지하지 않습니다. 새로운 검증자들로 구성된 스웜(swarm)이 오너의 코드 준비가 끝난 헤드를 검사합니다. 이후의 리베이스나 사소한 수정은 새로운 검증자 하나가 검사하며, 새로운 동작이나 대규모 diff가 추가된 경우에만 전체 스웜을 다시 호출합니다. 머지될 바로 그 패치에 대해 깨끗한 판정이 나왔을 때만 머지가 승인됩니다:
 
@@ -85,15 +85,15 @@ flowchart TD
 /poteto-mode autopilot these five changes, but don't merge. i'll land them in the morning.
 ```
 
-[Orchestrate](../../skills/poteto-mode/playbooks/orchestrate.md)는 단일 에이전트의 수명을 넘어서는 프로그램(며칠에 걸친 작업, 다수의 스택 PR, 하나의 상시 코디네이터 채팅 아래 움직이는 서브에이전트 함대)을 위한 플레이북입니다. 코디네이터는 각 작업 조각을 어느 에이전트가 맡을지 결정하고 각 에이전트가 만든 결과물을 검사하며, 직접 코드를 작성하는 일은 절대 없습니다. 단일 에이전트가 한 세션 안에 끝낼 수 있는 작업이라면 플레이북 자체가 위의 야간 자율 실행 계약으로 다시 라우팅합니다:
+여러 패키지에 걸친 마이그레이션과 같은 전체 프로그램에는 별도의 전용 플레이북이 없습니다. `/poteto-mode`는 규모가 크거나 여러 영역을 가로지르는 작업을 [`/figure-it-out`](../../skills/figure-it-out/SKILL.md)으로 라우팅하여 엄격한 단일 실행을 설계합니다:
 
 ```text
-/poteto-mode orchestrate the store migration. own it until every package is converted and merged. i'll check in twice a day.
+/poteto-mode migrate every package to the new store. own it until each one is converted and merged. i'll check in twice a day.
 ```
 
 ## 여러 프로젝트를 병렬로 실행하기
 
-[Cursor Project](https://cursor.com/blog/projects)는 하나의 코디네이터 에이전트에게 영구적인 스레드를 부여합니다. 코디네이터는 코드를 직접 작성하지 않습니다. 대신 기본적으로 클라우드에서 실행되는 서브에이전트들을 지휘하므로 노트북을 덮어도 작업이 계속 진행됩니다. 이것이 바로 Orchestrate 플레이북이 상정하는 형태입니다. 코디네이터에게 보내는 프롬프트를 `/poteto-mode`로 시작하면 코디네이터가 스폰하는 서브에이전트들이 플레이북을 따릅니다.
+[Cursor Project](https://cursor.com/blog/projects)는 하나의 코디네이터 에이전트에게 영구적인 스레드를 부여합니다. 코디네이터는 코드를 직접 작성하지 않습니다. 대신 기본적으로 클라우드에서 실행되는 서브에이전트들을 지휘하므로 노트북을 덮어도 작업이 계속 진행됩니다. 코디네이터에게 보내는 프롬프트를 `/poteto-mode`로 시작하면 코디네이터가 스폰하는 서브에이전트들이 플레이북을 따릅니다. 시작되는 각 에이전트는 먼저 [`worker.md`](../../skills/poteto-mode/worker.md)를 읽으므로, 워커들이 킥오프 기준을 지키고, 여러분에게 묻는 대신 되돌릴 수 있는 결정을 스스로 내리며, 리뷰 준비가 끝난 PR을 엽니다.
 
 다음 습관들이 도움이 됩니다:
 

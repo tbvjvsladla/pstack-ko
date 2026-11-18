@@ -8,7 +8,7 @@ pstack 스킬들은 Cursor의 명칭을 사용합니다. Claude Code에서는 �
 | --- | --- |
 | `Task` | `Agent` |
 | `AskQuestion` | `AskUserQuestion`. `-p` 모드에서는 이 도구가 없으므로 일반 텍스트로 질문하세요. |
-| 할 일 목록(todolist) 열기 | 세션에서 제공하는 경우 `TodoWrite`를 사용하세요. 그렇지 않으면 응답 본문에 목록을 유지하고 각 단계마다 업데이트하세요. |
+| 할 일 목록(todolist) 열기 또는 todolist 도구에 단계 복사하기 | 세션에서 제공하는 경우 `TodoWrite`를 사용하세요. 그렇지 않으면 응답 본문에 목록을 유지하고 각 단계마다 업데이트하세요. |
 | 다른 pstack 스킬 실행 (`/name` 또는 "the **name** skill") | `<pstack>/skills/<name>/SKILL.md`를 `Read`로 읽고 따르세요. `Skill` 도구는 대부분의 pstack 스킬을 거부합니다. 사용자에게 직접 입력하라고 안내할 때는 `/pstack:<name>`으로 표기하세요. |
 | `Grep`, `Glob` | 세션에 `Grep`이나 `Glob`이 없을 때는 `rg`를 사용하는 `Bash`로 대체하세요. |
 
@@ -18,6 +18,7 @@ pstack 스킬들은 Cursor의 명칭을 사용합니다. Claude Code에서는 �
 | --- | --- |
 | `subagent_type: generalPurpose` | `subagent_type: "general-purpose"` |
 | `poteto-agent`, `comment-sicko` | `pstack:poteto-agent`, `pstack:comment-sicko` |
+| `poteto-agent` 파일의 `model:` 줄 | 여기에는 Cursor 슬러그가 들어 있습니다. 해당 슬러그가 API에 도달하지 않도록 `pstack:poteto-agent`를 스폰하는 모든 `Agent` 호출에 Models 표로 매핑한 `model`과 `effort`를 전달하세요. |
 | `readonly: true` | `subagent_type: "Explore"`. `Bash` 도구가 그대로 유지되므로 브리핑에 "파일을 편집하지 마세요(do not edit files)"라고 명시하고, 작업 후 `git status`를 확인하세요. |
 | `readonly: false` | `general-purpose`. 세션의 MCP 서버들을 그대로 유지합니다. |
 | `environment: "cloud"` | `isolation: "worktree"`. 워커가 체크아웃할 브랜치나 커밋을 명시하세요. |
@@ -32,7 +33,7 @@ pstack 스킬들은 Cursor의 명칭을 사용합니다. Claude Code에서는 �
 | Cursor | Claude Code |
 | --- | --- |
 | `claude-opus-5-5-xhigh`와 같은 `claude-<family>-<version>-<effort>[-fast]` 형식 | `model: "opus"` 및 `effort: "xhigh"`. `model`은 오직 `opus`, `sonnet`, `haiku`, `fable`만 받습니다. `-fast`는 제거하세요. |
-| `grok-*`, `gpt-*` 또는 기타 비-Claude 슬러그 | 에이전트가 세션 모델에서 실행되도록 `model`을 생략하고 그 사실을 언급하세요. |
+| `gemini-*` 또는 기타 비-Claude 슬러그 | 에이전트가 세션 모델에서 실행되도록 `model`을 생략하고 그 사실을 언급하세요. |
 | `auto` 또는 `inherit-parent` | `model`을 생략합니다. |
 | `pstack-models.mdc` 규칙 (`~/.cursor/rules/pstack-models.mdc`) | `~/.claude/rules/pstack-models.md`. Claude Code는 모든 새 세션에 이 파일을 로드하므로 역할 줄들이 이미 컨텍스트에 들어 있습니다. 들어 있지 않다면 파일을 직접 읽으세요. 파일이나 해당 역할 줄이 없으면 스킬의 기본 슬러그를 사용하세요. |
 | `opus high`와 같은 `<model> <effort>` 형식의 역할 값 | `model: "opus"` 및 `effort: "high"`. |
@@ -42,7 +43,7 @@ pstack 스킬들은 Cursor의 명칭을 사용합니다. Claude Code에서는 �
 Claude Code는 모든 새 세션마다 `~/.claude/rules/` 안의 모든 `.md` 파일을 로드하므로 `setup-pstack`은 그곳에 규칙을 작성합니다. 다음 변경 사항을 적용하여 단계를 따르세요:
 
 - 감지(Detect). 감지된 모델은 `Agent` 도구 스키마가 나열하는 `model` 값들이며, 각각 스키마의 `effort` 값 중 하나와 짝을 이룹니다. 실제 모델은 `opus xhigh`처럼 `<model> <effort>` 형식으로 작성하세요. effort가 마지막 토큰이 되므로 예산(budget) 단계가 원문 그대로 작동합니다.
-- 기본값(Defaults). 위의 표를 사용해 각 기본 슬러그를 매핑합니다: `claude-opus-5-5-xhigh`는 `opus xhigh`가 되고, `grok-4.7-xhigh-fast`는 `inherit-parent`가 됩니다.
+- 기본값(Defaults). 위의 표를 사용해 각 기본 슬러그를 매핑합니다: `claude-opus-5-5-xhigh-fast`는 `opus xhigh`가 되고, `claude-opus-5-5-high-fast`는 `opus high`가 되고, `claude-fable-5-2-high`는 `fable high`가 되며, `gemini-4-carbon-high`는 `inherit-parent`가 됩니다.
 - 작성(Write). `~/.claude/rules/pstack-models.md`에 frontmatter 없이 주석 줄들, `# budget` 줄, 그리고 5단계의 역할별 줄을 한 줄씩 작성합니다. 파일 전체를 덮어쓰세요. 역할 줄들을 `CLAUDE.md`나 `AGENTS.md`에 절대 넣지 마세요.
 
 ## 경로 (Paths)

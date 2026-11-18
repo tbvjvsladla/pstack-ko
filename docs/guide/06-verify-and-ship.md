@@ -131,7 +131,7 @@
 /poteto-mode open the pr. small ordered commits, evidence in the description.
 ```
 
-[Opening a PR 플레이북](../../skills/poteto-mode/playbooks/opening-a-pr.md)은 워크트리에서 작업하며, 작업 내용을 정돈된 작은 커밋들로 리베이스하고, diff를 정리하며, 산문에서 슬롭을 걷어내고, PR 링크를 반환합니다. 뚱뚱한 PR 하나보다 좁은 범위의 PR 다섯 개가 낫고, 끝없이 커지는 브랜치보다 스택으로 쌓아 올린 후속 PR들이 낫습니다.
+[Opening a PR 플레이북](../../skills/poteto-mode/playbooks/opening-a-pr.md)은 워크트리에서 작업하며, 작업 내용을 랜딩 가능한 작은 커밋들로 리베이스하고, diff를 정리하며, 본문으로 1분 분량의 브리핑을 작성한 뒤, 준비된 상태로 PR을 엽니다. 끝없이 커지는 브랜치보다 스택으로 쌓아 올린 후속 PR들이 낫습니다.
 
 ## Babysit으로 PR을 머지 준비 상태까지 이끌기
 
@@ -141,7 +141,7 @@
 /poteto-mode babysit this pr. get it green.
 ```
 
-Babysit은 GitHub의 번들 워처(watcher)나 (사용 가능한 경우) Origin CLI를 통해 PR을 감시하며, 충돌 해결 → 리뷰 스레드 대응 → CI 통과 순서로 차단 요인을 처리합니다. 알려진 모든 수정 사항은 한 번의 푸시로 묶어서(batch) 반영하므로 수정할 때마다 매번 검사가 다시 시작되는 대신 한 번만 다시 시작됩니다. 사람과 봇 모두 진짜 문제와 단순 잡음을 같은 목록에 섞어서 남기기 때문에 코멘트 트리아지는 회의적인 시각으로 수행됩니다. 진짜 발견 사항은 수정을 거치고, 잡음은 스레드에 반증(disproof)을 게시하며 기각합니다. 단순히 현재 상태만 알고 싶을 때는 짧게 물어보면 Babysit이 루프를 시작하지 않고 바로 답해줍니다:
+Babysit은 GitHub의 번들 워처(watcher)나 (사용 가능한 경우) Origin CLI를 통해 PR을 감시하며, 충돌 해결 → 리뷰 스레드 대응 → CI 통과 순서로 차단 요인을 처리합니다. 절대 리베이스하거나 강제 푸시(force-push)하지 않습니다. 충돌이나 낡은 베이스(stale base)는 리베이스가 필요한 브랜치와 함께 여러분에게 되돌아옵니다. 사람과 봇 모두 진짜 문제와 단순 잡음을 같은 목록에 섞어서 남기기 때문에 코멘트 트리아지는 회의적인 시각으로 수행됩니다. 진짜 발견 사항은 수정을 거치고, 잡음은 스레드에 반증(disproof)을 게시하며 기각합니다. 단순히 현재 상태만 알고 싶을 때는 짧게 물어보면 Babysit이 루프를 시작하지 않고 바로 답해줍니다:
 
 ```text
 /poteto-mode check on pr 123. anything outstanding?

@@ -56,7 +56,7 @@
 
 ## 커밋하기 전에 정리하기
 
-[Opening a PR 플레이북](../../skills/poteto-mode/playbooks/opening-a-pr.md)은 각 커밋 전에 diff에 대해 `/deslop`을 실행하고 PR 설명과 커밋 본문에 [`/unslop`](../../skills/unslop/SKILL.md)을 적용합니다. `/deslop`은 pstack이 아니라 `cursor-team-kit` 플러그인에 포함되어 있습니다. 해당 플러그인이 없다면 평이한 말로 동일한 결과를 요청하세요: 코드를 중계하는 주석, 근거 없는 가드 로직, 죽은 호환성 경로, 관련 없는 편집을 제거하라고 지시하면 됩니다.
+[Opening a PR 플레이북](../../skills/poteto-mode/playbooks/opening-a-pr.md)은 각 커밋 전에 diff에 대해 `/deslop`을 실행하며, poteto-mode는 PR 설명과 커밋 본문에 [`/unslop`](../../skills/unslop/SKILL.md)을 적용합니다. `/deslop`은 pstack이 아니라 `cursor-team-kit` 플러그인에 포함되어 있습니다. 해당 플러그인이 없다면 평이한 말로 동일한 결과를 요청하세요: 코드를 중계하는 주석, 근거 없는 가드 로직, 죽은 호환성 경로, 관련 없는 편집을 제거하라고 지시하면 됩니다.
 
 산문의 경우 `/unslop`은 대상과 여러분이 원하는 추가 규칙을 인자로 받습니다:
 

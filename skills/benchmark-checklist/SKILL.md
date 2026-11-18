@@ -2,8 +2,8 @@
 name: benchmark-checklist
 description: >-
   성능 측정값(병목 요인, 튜닝 여부, 물리적 한계, 에러, 재현성, 유의미성, 실제 작업 수행 여부)을 보고하거나 그에
-  기반해 행동하기 전에 철저히 검증합니다. 벤치마크를 실행하거나 측정한 속도 향상 또는 성능 저하(regression)를
-  보고할 때 사용하세요.
+  기반해 행동하기 전에 검증합니다. 벤치마크를 실행하거나 측정한 속도 향상 또는 성능 저하(regression)를 보고할
+  때 사용하세요.
 disable-model-invocation: true
 ---
 

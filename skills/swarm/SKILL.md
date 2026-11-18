@@ -1,9 +1,9 @@
 ---
 name: swarm
 description: >-
-  N개의 병렬 워커를 팬아웃(fan out)하고 결과를 모두 수거하여 하나의 보고서로 반환합니다. /swarm, '이거
-  스웜으로 돌려줘(swarm this)', 또는 병렬 커버리지, 레이스(races), 건틀릿(gauntlets), 탐색
-  작업에 사용하세요.
+  N개의 병렬 워커를 팬아웃(fan out)하고 결과를 모두 수거하여 하나의 보고서로 반환합니다. /swarm,
+  'swarm this', 또는 병렬 커버리지, 레이스(races), 건틀릿(gauntlets), 탐색 작업에
+  사용하세요.
 disable-model-invocation: true
 ---
 
@@ -22,7 +22,7 @@ disable-model-invocation: true
 
 1. 완료 조건(done predicate)과 스웜이 반환해야 할 아티팩트 또는 보고서를 명시하세요.
 2. 형태를 선택하세요. 조각(slice)으로 분할하거나, 동일한 브리핑으로 N개의 워커를 경쟁(race)시키거나, 두 방식을 혼합합니다. 레이스 또는 혼합 형태의 경우 워커를 띄우기 전에 `first pass`, `rank all`, 또는 `best-of` 중 선택 규칙을 먼저 선언하세요.
-3. `~/.cursor/rules/pstack-models.mdc`의 `swarm workers` 줄에서 워커 모델을 선택하세요. 규칙이나 해당 줄이 없으면 `grok-4.7-xhigh-fast`를 사용합니다. `auto` 또는 `inherit-parent`인 경우 워커가 부모 모델에서 실행되도록 `model`을 생략하세요. Task 도구가 슬러그를 거부하면 기본값을 사용하고 그 사실을 알리세요. 기본값도 거부하면 에러 메시지에서 동일한 패밀리의 가장 가까운 유효한 슬러그를 사용하세요. 모델 간 레이스의 경우 각 갈래(arm)의 모델을 사전에 명시하세요. **poteto-mode** 스킬의 Subagents 섹션에 따라 작업에 맞는 각 서브에이전트의 추론 수준과 속도(빠름 또는 표준)를 선택하세요.
+3. `~/.cursor/rules/pstack-models.mdc`의 `swarm workers` 줄에서 워커 모델을 선택하세요. 규칙이나 해당 줄이 없으면 `claude-opus-5-5-high-fast`를 사용합니다. `auto` 또는 `inherit-parent`인 경우 워커가 부모 모델에서 실행되도록 `model`을 생략하세요. Task 도구가 슬러그를 거부하면 기본값을 사용하고 그 사실을 알리세요. 기본값도 거부하면 에러 메시지에서 동일한 패밀리의 가장 가까운 유효한 슬러그를 사용하세요. 모델 간 레이스의 경우 각 갈래(arm)의 모델을 사전에 명시하세요. **poteto-mode** 스킬의 Subagents 섹션에 따라 작업에 맞는 각 서브에이전트의 추론 수준을 선택하세요.
 4. 워커가 쓰기 작업을 수행할 때는 각 워커마다 고유한 쓰기 가능한 출력 경로를 부여하세요. 워커가 커밋을 검증하거나 측정할 때는 각 브리핑에 정확한 SHA를 명시합니다. 측정 브리핑에는 측정 방법(표본 크기, 단일 표본의 정의, 순서)도 함께 명시합니다. 워커는 결과에 두 가지 모두를 기록해야 합니다.
 
 ## Phase B: Fan out (팬아웃)

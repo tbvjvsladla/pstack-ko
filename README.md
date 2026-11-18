@@ -3,7 +3,7 @@
 > [!NOTE]
 > **한국어 학습·연구 에디션 (`pstack-ko`) 안내**
 >
-> 이 저장소는 원본 [`pstack`](https://github.com/cursor/plugins/tree/main/plugins/pstack)(by [poteto](https://x.com/poteto))의 핵심 자산 대부분이 정교한 영문 **마크다운(프롬프트·플레이북·엔지니어링 원칙·형식검증 스킬)**으로 구성되어 있는 점에 착안하여, **한국인 AI 개발자들이 `pstack`의 프롬프트 설계와 에이전트 하네스 아키텍처를 깊이 있게 공부(수학)하고 분석할 수 있도록 전체 마크다운(169개 문서)을 한국어로 번역해 배포하는 학습 목적의 프로젝트**입니다.
+> 이 저장소는 원본 [`pstack`](https://github.com/cursor/plugins/tree/main/plugins/pstack)(by [poteto](https://x.com/poteto))의 핵심 자산 대부분이 정교한 영문 **마크다운(프롬프트·플레이북·엔지니어링 원칙·형식검증 스킬)**으로 구성되어 있는 점에 착안하여, **한국인 AI 개발자들이 `pstack`의 프롬프트 설계와 에이전트 하네스 아키텍처를 깊이 있게 공부(수학)하고 분석할 수 있도록 전체 마크다운(148개 문서)을 한국어로 번역해 배포하는 학습 목적의 프로젝트**입니다.
 
 저는 [poteto](https://x.com/poteto)입니다. 사장이나 CEO는 아니지만 Meta, Netflix, Cursor에서 수백만 줄의 코드를 다뤄왔습니다. 또한 React 코어 팀의 일원으로서 React 컴파일러를 구축하고 유지보수하는 일을 돕고 있습니다.
 
@@ -45,7 +45,7 @@ Claude Code는 저장소 루트의 [`harness/pstack/`](https://github.com/cursor
 
 처음 오셨나요? [pstack 가이드](./docs/guide/README.md)를 따라가면 설정과 프롬프트 작성부터 검증 및 야간 자율 실행(overnight run)까지 첫 번째 실전 과업을 차근차근 경험할 수 있습니다. 막히거나 어떤 스킬이 맞는지 잘 모르겠다면 [`/poteto-help`](./skills/poteto-help/SKILL.md)에 물어보세요.
 
-그게 전부입니다. 다른 스킬들은 상황에 따라 쓰이며, 모드 스킬이 필요할 때 알아서 호출해 줍니다. 기본 설정에서 모드는 모델의 강점에 따라 작업을 나눕니다: 코드 위임 작업(기능 구현, 리팩터링, 버그 수정, 성능 개선, 힐클라이밍)은 Grok으로 가고, 가장 까다로운 변경 사항, 산문 작성, 판단 작업은 Opus 5.5로 갑니다. 기본 패널은 Opus 5.5 / Grok입니다. [`/setup-pstack`](./skills/setup-pstack/SKILL.md)으로 이 설정을 언제든 바꿀 수 있습니다.
+그게 전부입니다. 다른 스킬들은 상황에 따라 쓰이며, 모드 스킬이 필요할 때 알아서 호출해 줍니다. 기본 설정에서 코드 위임 작업(기능 구현, 리팩터링, 버그 수정, 성능 개선, 힐클라이밍), 산문 작성, 판단 작업은 모두 `xhigh` 수준의 Opus 5.5로 가며, 어떤 역할도 `xhigh`를 초과해 실행되지 않습니다. 리뷰 패널 바깥에서 Fable 5.2는 사용자가 직접 이름을 지정했거나 동일한 브리핑에 대한 Opus 5.5 실행이 두 번 실패한 후에만 실행됩니다. 기본 패널은 Fable 5.2 / Opus 5.5 / Gemini 4 Carbon입니다. [`/setup-pstack`](./skills/setup-pstack/SKILL.md)으로 이 설정을 언제든 바꿀 수 있습니다.
 
 ## 사용법
 
@@ -55,7 +55,7 @@ Claude Code는 저장소 루트의 [`harness/pstack/`](https://github.com/cursor
 
 ### 그냥 [`/poteto-mode`](./skills/poteto-mode/SKILL.md)를 쓰세요
 
-이 스킬이 핵심 단축키입니다. 저는 에이전트에게 엄격한 엔지니어링 작업을 시켜야 할 때마다 이 스킬을 씁니다. 여기에는 23개의 플레이북이 포함되어 있습니다:
+이 스킬이 핵심 단축키입니다. 저는 에이전트에게 엄격한 엔지니어링 작업을 시켜야 할 때마다 이 스킬을 씁니다. 여기에는 22개의 플레이북이 포함되어 있습니다:
 
 ```
 /poteto-mode this pr has a subtle bug where the scroll drifts every 750ms even when idle. repro
@@ -68,7 +68,7 @@ morning.
 ```
 
 <details>
-<summary>23개의 플레이북</summary>
+<summary>22개의 플레이북</summary>
 
 | 플레이북 | 용도 |
 |---|---|
@@ -87,7 +87,6 @@ morning.
 | [babysit](./skills/poteto-mode/playbooks/babysit.md) | 충돌 해결, 리뷰 스레드 대응, CI 통과까지 PR이나 스택을 머지 가능한 상태로 이끕니다. |
 | [shipping](./skills/poteto-mode/playbooks/shipping.md) | 그린 상태인 스택을 독립적으로 검증한 뒤, 기본적으로는 GitHub을 통해(또는 사용 가능한 경우 origin을 통해) 연속된 검증 완료 구간을 아래에서 위로 랜딩합니다. |
 | [autonomous run](./skills/poteto-mode/playbooks/autonomous-run.md) | 긴 과업을 멈추지 않고 완료될 때까지 몰고 갑니다. |
-| [orchestrate](./skills/poteto-mode/playbooks/orchestrate.md) | 하나의 코디네이터 채팅에 맡겨진 상시 프로젝트: 며칠에 걸친 작업, 다수의 스택 PR, 서브에이전트 함대를 조율합니다. |
 | [autopilot-full](./skills/poteto-mode/playbooks/autopilot-full.md) | PR당 한 명의 오너를 두고 독립적인 PR들을 머지까지 이끕니다. 스웜(swarm)이 코드 준비가 끝난 각 헤드를 검증하며, 이후 패치에 가해지는 모든 변경은 새로운 검사를 받습니다. |
 | [autopilot-stack](./skills/poteto-mode/playbooks/autopilot-stack.md) | 머지만 제외한 autopilot-full입니다. 오퍼레이터가 리뷰하고 랜딩할 수 있도록 PR을 빌드 및 검증하며, 의존하는 PR 위에만 스택을 쌓습니다. |
 | [session pickup](./skills/poteto-mode/playbooks/session-pickup.md) | 이전 에이전트가 진행 중이던 작업을 재개하거나 이어받습니다. |
@@ -134,7 +133,7 @@ morning.
 | [`/in-your-own-words`](./skills/in-your-own-words/SKILL.md) | 에이전트가 작업을 시작하기 전에 목표와 문제를 자신의 말로 되짚어보게 하고 싶을 때 씁니다. `/in-your-own-words`를 직접 입력할 때만 실행됩니다. |
 | [`/sharpen`](./skills/sharpen/SKILL.md) | 프롬프트를 보내기 전에 길이를 늘리는 대신 깊이를 더하고 싶을 때 씁니다: 최고 수준의 전문가가 요청받지 않았더라도 챙겼을 사항, 출발점으로 삼을 원재료, 방법론과 도구, 그리고 결과가 맞는지 확인하는 외부 검증 기준을 짚어줍니다. 다시 쓴 프롬프트를 돌려주며 선택권은 사용자에게 남겨둡니다. 과업 자체를 수행하지는 않으며, `/sharpen`을 직접 입력할 때만 실행됩니다. |
 | [`/how`](./skills/how/SKILL.md) | 서브시스템이 어떻게 작동하는지 상세한 워크스루를 원할 때 씁니다. |
-| [`/why`](./skills/why/SKILL.md) | 왜 무언가가 지금처럼 만들어졌는지 알고 싶을 때 씁니다. 런타임에 사용 가능한 MCP를 탐색하고 각 증거 범주(소스 컨트롤, 이슈 트래커, 장문 문서, 실시간 채팅, 인프라 관측성, 에러 트래킹, 애널리틱스 웨어하우스)를 병렬로 질의합니다. |
+| [`/why`](./skills/why/SKILL.md) | 왜 무언가가 지금처럼 만들어졌는지 알고 싶을 때 씁니다. 코드가 아니라 기록으로부터 답합니다: 이를 도입한 커밋 및 PR 논의와 이후의 각 변경 사항을 읽고, 그 흔적이 빈약할 때는 다른 출처를 살핍니다. 작성자가 쓴 내용을 인용하고, 에이전트 자신의 추론은 추론으로 표시하며, 기록이 답해주지 않는 부분도 명시합니다. |
 | [`/recall`](./skills/recall/SKILL.md) | 작업을 시작하거나 재개할 때 본인의 채팅 기록과 공유 기록으로부터 특정 주제의 최근 맥락을 재구성하여 간결한 현재 상태 브리핑으로 돌려받고 싶을 때 씁니다. |
 | [`/ketchup`](./skills/ketchup/SKILL.md) | 마지막 메시지 이후 이 채팅에서 무엇이 바뀌었는지 평이한 말과 작은 시각 자료로 확인하고, 사용자의 결정을 기다리는 모든 항목을 나열해 응답만 보고도 바로 결정할 수 있게(응답이 길어지더라도) 받고 싶을 때 씁니다. |
 | [`/ketchup-video`](./skills/ketchup-video/SKILL.md) | `/ketchup` 요약을 짧은 자막 슬라이드 비디오로 보고, 결정을 기다리는 사안들은 그 아래에 텍스트로 받고 싶을 때 씁니다. |
@@ -283,7 +282,7 @@ Cursor에는 이미 pstack과 아주 잘 어우러지는 훌륭한 플랜 모드
 
 모델 역시 설정 가능합니다. [`/setup-pstack`](./skills/setup-pstack/SKILL.md)을 입력해 보세요. 접근 가능한 모델을 감지하고 각 역할(코드, 판단, 리뷰 패널)을 모델에 매핑하는 작은 상시 적용(always-applied) 규칙을 작성합니다. 모든 스킬이 이 규칙을 읽으며 규칙이 없을 때는 합리적인 기본값으로 폴백하므로, 바꾸고 싶은 부분만 오버라이드하면 됩니다.
 
-기본값이 변경되더라도 변경 전에 작성된 규칙 파일은 여전히 예전 기본값을 고정(pin)합니다. 해당 역할 줄을 삭제하거나 파일을 삭제한 뒤 `/setup-pstack`을 다시 실행하세요. 다시 실행할 때는 기본값과 다른 모델이 지정된 역할은 그대로 유지됩니다.
+기본값이 변경되더라도 변경 전에 작성된 규칙은 `/setup-pstack`을 다시 실행하기 전까지 여전히 예전 기본값을 고정(pin)합니다. 다시 실행하면 인식한 예전 기본값은 새 기본값으로 교체하고, 기본값과 다른 모델이 지정된 다른 역할은 그대로 유지됩니다. 인식하지 못하는 고정을 풀려면 먼저 해당 역할의 줄이나 파일 자체를 삭제하세요.
 
 ## 자동화 (Automations)
 

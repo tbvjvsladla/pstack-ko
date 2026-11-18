@@ -47,11 +47,11 @@ pstack에 대한 사용자의 질문에 답하고, 사용자가 그대로 복사
 
 pstack은 Cursor용으로 제작되었지만, Claude Code에서도 `/plugin marketplace add cursor/plugins`를 실행한 뒤 `/plugin install pstack@cursor-plugins`를 실행하여 설치할 수 있습니다. Claude Code에서는 각 명령어 앞에 `pstack:` 접두사가 붙습니다(예: `/pstack:poteto-mode`). [Claude Code 어댑터](../../docs/harness/claude-code.md)가 Cursor 명칭들을 매핑해 주며, Bugbot이나 Automations처럼 Cursor 전용 기능이 필요한 단계는 한 줄 안내와 함께 건너뜁니다.
 
-스킬들이 표준 Agent Skills 포맷을 사용하므로 다른 도구들도 스킬 문서를 읽을 수는 있습니다. 하지만 `/poteto-mode`, `/how`, `/why`, `/teach`를 포함한 대부분의 워크플로 스킬은 역할별 모델이 지정된 Cursor 서브에이전트를 띄우며, Custom Modes와 `/loop` 역시 Cursor 고유 기능이므로 다른 도구에서는 해당 부분들이 작동하지 않을 수 있습니다.
+스킬들이 표준 Agent Skills 포맷을 사용하므로 다른 도구들도 스킬 문서를 읽을 수는 있습니다. 하지만 `/poteto-mode`, `/how`, `/teach`를 포함한 대부분의 워크플로 스킬은 역할별 모델이 지정된 Cursor 서브에이전트를 띄우며, Custom Modes와 `/loop` 역시 Cursor 고유 기능이므로 다른 도구에서는 해당 부분들이 작동하지 않을 수 있습니다.
 
 ## `/poteto-mode`로 작업 시작하기 (Start a task with `/poteto-mode`)
 
-`/poteto-mode`는 과업을 적절한 플레이북에 매칭하고, 플레이북의 단계들을 할 일 목록(todo list)에 복사한 뒤, 각 단계에 필요한 다른 스킬들을 순차적으로 실행합니다. 건너뛰는 단계는 목록에 `skip: <사유>`로 남습니다. 좋은 프롬프트는 달성할 목표와 완료 여부를 확인하는 방법을 명시합니다. 플레이북이 유지해야 할 단계를 빠뜨리거나 순서를 뒤섞기 쉬우므로 프롬프트에 실행할 스킬들을 손수 나열하지 마세요. 프롬프트 문구 작성을 도울 때는 먼저 [`references/prompting.md`](references/prompting.md)를 읽으세요. [가이드 2페이지](../../docs/guide/02-poteto-mode.md)에 예시들이 나와 있습니다.
+`/poteto-mode`는 과업을 적절한 플레이북에 매칭하고, 플레이북의 단계들을 할 일 목록(todo list)에 복사한 뒤, 각 단계에 필요한 다른 스킬들을 순차적으로 실행합니다. 좋은 프롬프트는 달성할 목표와 완료 여부를 확인하는 방법을 명시합니다. 플레이북이 유지해야 할 단계를 빠뜨리거나 순서를 뒤섞기 쉬우므로 프롬프트에 실행할 스킬들을 손수 나열하지 마세요. 프롬프트 문구 작성을 도울 때는 먼저 [`references/prompting.md`](references/prompting.md)를 읽으세요. [가이드 2페이지](../../docs/guide/02-poteto-mode.md)에 예시들이 나와 있습니다.
 
 `/poteto-mode`가 계속 켜져 있는지 여부는 사용자가 어떻게 시작하느냐에 달려 있습니다:
 
@@ -108,16 +108,15 @@ pstack은 Cursor용으로 제작되었지만, Claude Code에서도 `/plugin mark
 
 - `/how`는 코드가 무슨 일을 하는지 설명합니다. `/why`는 왜 그렇게 되어 있는지 이유를 설명합니다. `/teach`는 둘 중 하나 또는 둘 다를 실행한 뒤 그 결과를 평이하게 풀어서 가르쳐 줍니다.
 - `/arena`는 모든 워커에게 동일한 요구사항을 주고 가장 훌륭한 부분들을 병합합니다. `/swarm`은 작업을 여러 조각으로 나누거나 경쟁(race)시키고 단일 보고서를 반환합니다.
-- `/architect`는 설계를 확정한 직후 곧바로 구현까지 진행합니다. 코드를 작성하기 전에 설계를 먼저 리뷰하고 싶다면 "with checkpoint"를 덧붙이세요.
 - `/interrogate`는 diff 자체를 적대적으로 리뷰합니다. `/blast-radius`는 diff 바깥에서 발생할 수 있는 파손을 찾고 변경사항이 안전한 결정적 사실 한 가지를 증명합니다.
 - `/recall`은 최근의 여러 채팅에 걸쳐 컨텍스트를 재구축합니다. `/ketchup`은 오직 현재 채팅에서 사용자의 마지막 메시지 이후에 일어난 일만 다룹니다. 특정 채팅이나 브랜치 하나를 이어받아 재개하는 것은 Session pickup 플레이북의 역할입니다.
-- `/figure-it-out`은 하나의 엄격한 실행 워크플로를 설계합니다. Orchestrate 플레이북은 수일에 걸쳐 여러 PR로 이어지는 대규모 프로그램을 실행합니다. Autonomous run 플레이북은 단일 과업을 완료 조건까지 자율 구동합니다.
+- `/figure-it-out`은 하나의 엄격한 실행 워크플로를 설계합니다. Autonomous run 플레이북은 단일 과업을 완료 조건까지 자율 구동합니다.
 
 pstack에 포함되지 않은 기능 (Not in pstack):
 
 - `/deslop`, `control-cli`, `control-ui`는 `cursor-team-kit` 플러그인에 포함되어 있습니다.
 - `/loop`와 `/create-skill`은 Cursor 내장(built-in) 기능입니다.
-- pstack에는 `/orchestrate`라는 개별 스킬이 없습니다. Orchestrate는 `/poteto-mode` 내부의 플레이북입니다. 만약 슬래시 메뉴에 `/orchestrate`가 보인다면 다른 플러그인이 제공하는 것입니다.
+- pstack에는 `/orchestrate` 스킬이 없습니다. 만약 슬래시 메뉴에 `/orchestrate`가 보인다면 다른 플러그인이 제공하는 것입니다.
 
 ## 플레이북과 원칙 (Playbooks and principles)
 

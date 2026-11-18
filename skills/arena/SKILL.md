@@ -2,8 +2,8 @@
 name: arena
 description: >-
   동일한 과제에 대해 N개의 병렬 후보를 생성하고, 베이스를 선택한 뒤, 탈락한 후보들의 가장 강력한 부분을 베이스에
-  접목(graft)합니다. /arena, 'arena this', 'throw it in the arena', 또는 비자명한
-  산출물을 단 한 번의 시도로 만들면 잘못된 형태가 고착될 위험이 있을 때 사용하세요.
+  접목(graft)합니다. /arena, 'arena this', 'throw it in the arena', 또는
+  비자명한 산출물을 단 한 번의 시도로 만들면 잘못된 형태가 고착될 위험이 있을 때 사용하세요.
 disable-model-invocation: true
 ---
 
@@ -17,7 +17,7 @@ disable-model-invocation: true
 
 1. 각 후보가 생성할 산출물을 명확히 규정합니다.
 2. *이번* 과제에서 성공이 어떤 모습인지 판단할 수 있는 구체적이고 채점 가능한 기준 3~6개로 루브릭(rubric)을 도출합니다. 이 루브릭은 Phase D에서 선택자(picker)가 사용하는 도구입니다. 후보들에게는 과제만 보입니다.
-3. 러너를 선택합니다. `~/.cursor/rules/pstack-models.mdc`의 `arena runners` 줄을 사용하세요. 해당 규칙 파일이나 해당 줄이 없다면 기본적으로 `claude-opus-5-5-xhigh`와 `grok-4.7-xhigh-fast`에서 각각 하나씩 실행합니다. 이 줄에 있는 `auto` 또는 `inherit-parent` 항목은 부모 모델을 의미하므로 해당 항목에는 `model` 지정을 생략합니다. 만약 Task 도구가 설정된 항목을 거부하면 해당 자리는 그 모델 패밀리의 기본값으로 실행하고 그 사실을 알리세요. 패밀리는 접두사로 구분합니다: `claude-*`, 그리고 `cursor-grok-*` 및 `composer-*`를 포함하는 `grok-*`입니다. 거부된 `composer-*` 항목은 `grok-4.7-xhigh-fast`에서 실행합니다. 패밀리에 기본값이 없거나 Task 도구가 그 기본값마저 거부하면, 에러 메시지에서 확인되는 동일 패밀리의 가장 가까운 유효 슬러그(slug)를 사용하고, 그마저도 없으면 해당 자리를 제외하고 그 사실을 알리세요. 제외된 자리들로 인해 러너가 2개 미만이 되면 러너가 2개가 될 때까지(원래 줄에 항목이 1개뿐이었다면 1개가 될 때까지) 러너를 추가합니다. 추가된 각 러너는 남아 있는 러너의 모델로 실행하거나, 남은 러너가 없다면 `model`을 생략해 부모 모델에서 실행하고 그 사실을 알리세요. 아레나가 여러 설계 방향을 포괄할 때는 더 많은 러너를 띄우세요. 작업이 판단력에 민감하기보다 생성량에 좌우되는(generation-bound) 성격이라면 동일한 모델을 N번 사용하세요. **poteto-mode** 스킬의 Subagents 섹션에 따라 작업에 맞게 각 서브에이전트의 추론 수준(reasoning level)과 속도(fast 또는 standard)를 선택하세요.
+3. `~/.cursor/rules/pstack-models.mdc`의 `arena runners` 줄에서 러너를 선택하세요. 기본값은 `claude-fable-5-2-high`, `claude-opus-5-5-high-fast`, `gemini-4-carbon-high`입니다. `auto` 또는 `inherit-parent` 항목은 부모 모델을 의미하므로 `model` 지정을 생략하고 `generalPurpose`를 띄우세요. Task 도구가 슬러그를 거부하면 같은 패밀리의 가장 가까운 유효 슬러그를 사용하거나 해당 자리를 제외하되, 최소 두 개 이상의 러너를 유지하고 그 사실을 알리세요. 패밀리는 접두사로 구분하며 가장 긴 일치가 우선합니다. 선행 `cursor-`를 제거한 뒤 `claude-fable-*`, `claude-*`, `gemini-*` 순으로 판별합니다. 그 외 슬러그의 패밀리는 첫 번째 하이픈 앞의 텍스트입니다. 여러 설계 방향이 필요할 때는 더 많은 러너를 띄우고, 작업이 판단력에 민감하기보다 생성량에 좌우되는(generation-bound) 성격이라면 동일한 모델을 반복 사용하세요. **poteto-mode** 스킬의 Subagents 섹션에 따라 각 서브에이전트의 추론 수준을 선택하세요.
 4. **separate-before-serializing-shared-state** 원칙 스킬에 따라 각 후보에게 고유한 출력 위치(가능하면 git worktree, 그렇지 않으면 `/tmp/arena-<slug>/candidate-<n>/`)를 부여합니다.
 
 ## Phase B: 병렬 전개 (Fan out)
@@ -28,7 +28,7 @@ disable-model-invocation: true
 
 ## Phase C: 교차 심사 (Cross-judge)
 
-Phase B의 모든 후보가 완료된 후, `~/.cursor/rules/pstack-models.mdc`의 `arena cross-judge pool` 줄에서 모델 하나를 선택합니다. 해당 규칙 파일이나 해당 줄이 없다면 `claude-opus-5-5-xhigh`와 `grok-4.7-xhigh-fast` 중에서 선택합니다. 읽기 전용(readonly) 심사위원 서브에이전트를 하나 띄웁니다. 심사위원은 절대 부모와 같은 모델 패밀리에서 고르지 않으며, 패밀리 구분은 Phase A의 3단계 정의를 따릅니다. 풀(pool) 순서대로 다른 패밀리의 항목들만 시도하세요. `auto`나 `inherit-parent` 항목은 부모 모델이므로 절대 심사위원이 될 수 없습니다. 기본 풀을 사용할 때 부모가 Claude라면 `grok-4.7-xhigh-fast`가 배정됩니다. 그 외 다른 패밀리의 부모라면 `claude-opus-5-5-xhigh`가 먼저 배정됩니다. 만약 Task 도구가 항목을 거부하면 에러 메시지에서 확인되는 동일 모델의 가장 가까운 추론 수준이나 속도를 가진 유효 슬러그를 사용하고, 없다면 다음 항목으로 넘어갑니다. 다른 패밀리의 항목 중 실행되는 것이 하나도 없다면, 기본 풀에 있는 다른 패밀리 항목들을 동일한 방식으로 시도합니다. 그마저도 실행되지 않으면 심사위원 단계를 건너뛰고 Phase D에서 단독으로 베이스를 선택한 뒤 그 사실을 알리세요. 부모 모델을 알 수 없는 경우에는 풀에 있는 실제 슬러그들을 순서대로 시도하고 패밀리 검사를 실행하지 못했다고 알리세요. 심사위원은 루브릭과 경로 라벨로 표시된 후보들을 확인하고, 각 기준별로 점수를 매긴 뒤 근거와 함께 베이스 후보를 추천합니다. 심사위원은 Phase D에서 당신이 후보들을 읽는 작업과 병렬로 실행됩니다. 후보들이 아직 작성 중일 때는 심사위원을 띄우지 마세요.
+Phase B의 모든 후보가 완료된 후, `~/.cursor/rules/pstack-models.mdc`의 `arena cross-judge pool` 줄에서 읽기 전용(readonly) 심사위원을 하나 띄웁니다. 기본값은 `claude-opus-5-5-high-fast`, `gemini-4-carbon-high`입니다. 심사위원은 절대 부모와 같은 벤더에서 고르지 않으며, 이 확인에서는 Fable도 Claude에 포함되므로 다른 벤더의 첫 번째 항목을 사용하세요. `auto` 또는 `inherit-parent` 항목은 부모 모델입니다. 부모의 모델을 알 수 없는 경우에는 첫 번째 실제 슬러그를 사용하고 벤더 검사를 실행하지 못했다고 알리세요. 만약 Task 도구가 슬러그를 거부하면 같은 패밀리의 가장 가까운 유효 슬러그를 사용하고, 그다음으로는 다음 후보 항목을 시도하거나 심사위원 단계를 건너뛰고 그 사실을 알리세요. Phase D에서 당신이 후보들을 읽는 동안, 심사위원은 경로 라벨로 표시된 각 후보를 루브릭의 각 기준별로 채점하고 베이스 후보를 추천합니다.
 
 ## Phase D: 베이스 선택 (Pick a base)
 
